@@ -6,17 +6,18 @@ namespace ProjetGED
     using System.Linq;
     using ProjetGED.Models;
     using System.Data.SqlClient;
+    using Microsoft.AspNet.Identity.EntityFramework;
 
-    public partial class GEDContext : DbContext
+    public partial class GEDContext : IdentityDbContext<ApplicationUser>
     {
         public GEDContext()
             : base("name=EFGEDModel")
         {
             
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<GEDContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<GEDContext>());
             
         }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> OurUsers { get; set; }
         
         /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -1,0 +1,16 @@
+﻿@model ProjetGED.Models.LogInModel
+@{
+    ViewBag.Title = "LogIn";
+}
+
+<h2>LogIn</h2>
+
+@Html.ValidationSummary(true)
+
+@using (Html.BeginForm(actionName:"LogIn",controllerName:"Auth",method:FormMethod.Post))
+{
+    @Html.EditorForModel()
+    <p>
+        <button type="submit">Log In</button>
+    </p>
+}
