@@ -9,5 +9,6 @@ namespace ProjetGED
     public class ApplicationUser:IdentityUser
     {
         // add more properties
+        public string LeNom { get; set; }
     }
 }

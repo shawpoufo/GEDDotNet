@@ -13,8 +13,14 @@ namespace ProjetGED
     public class Startup
     {
         public static Func<UserManager<ApplicationUser>> UserManagerFactory { get; private set; }
+        public static GEDContext DBContext { get; set; }
+        static Startup()
+        {
+            DBContext = new GEDContext();
+        }
         public void Configuration(IAppBuilder app)
         {
+ 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "ApplicationCookie",
@@ -26,7 +32,7 @@ namespace ProjetGED
             UserManagerFactory = () =>
             {
                 var usermanager = new UserManager<ApplicationUser>(
-                    new UserStore<ApplicationUser>(new GEDContext()));
+                    new UserStore<ApplicationUser>(DBContext));
 
                 // allow alphanumeric characters in username
                 usermanager.UserValidator = new UserValidator<ApplicationUser>(usermanager)
@@ -42,6 +48,11 @@ namespace ProjetGED
 
                 return usermanager;
             };
+        }
+
+        ~Startup()
+        {
+            
         }
     }
 }

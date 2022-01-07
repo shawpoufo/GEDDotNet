@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
 using ProjetGED.Models;
 using ProjetGED.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -49,9 +51,10 @@ namespace ProjetGED.Controllers
             if (user != null)
             {
                 var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-               
                 var ctx = Request.GetOwinContext();
                 var authManager = ctx.Authentication;
+                int userId = Startup.DBContext.OurUsers.First(u => u.Email == user.UserName).Id;
+                identity.AddClaim(new Claim(type:"UserId", value:userId.ToString()));
                 authManager.SignIn(identity);
               
                 if (string.IsNullOrEmpty(model.ReturnUrl) || !Url.IsLocalUrl(model.ReturnUrl))
@@ -91,30 +94,53 @@ namespace ProjetGED.Controllers
                 UserName = model.Email,
                 
             };
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                Request.GetOwinContext().Authentication.SignIn(identity);
+            //var result = await userManager.CreateAsync(user, model.Password);
+            //if (result.Succeeded)
+            //{
+            //    var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            //    Request.GetOwinContext().Authentication.SignIn(identity);
 
-                await Task.Run(() =>
+
+            IEnumerable<string> resError = null;
+                using (var transaction = Startup.DBContext.Database.BeginTransaction())
+                {
+                    var result = await userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
                     {
-                        using (var gedContext = new GEDContext())
-                        {
+                        var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                        var newUser = Startup.DBContext.OurUsers.Add(new User { Email = model.Email, Name = model.Name });
 
-                            gedContext.OurUsers.Add(new User { Email = model.Email, Name = model.Name });
-                            gedContext.SaveChanges();
+                        try
+                        {
+                            if (Startup.DBContext.SaveChanges() > 0)
+                            {
+                                Directory.CreateDirectory(Server.MapPath("~") + "cloud\\" + newUser.Id);
+                                newUser.Folders.Add(new Folder { CreatedAt = DateTime.Now, Parent = null, Name = newUser.Id.ToString(), Path = Server.MapPath("~") + "cloud\\" + newUser.Id });
+                                Startup.DBContext.SaveChanges();
+                                transaction.Commit();
+                            }
+
+                            identity.AddClaim(new Claim(type: "UserId", value: newUser.Id.ToString()));
+                            Request.GetOwinContext().Authentication.SignIn(identity);
+                            return RedirectToAction("Index", "Home");
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            resError = result.Errors;
                         }
                     }
-                );
 
-                return RedirectToAction("Index", "Home");
-            }
-
-            foreach(var err in result.Errors)
+                }
+            //}
+            if(resError != null)
             {
-                ModelState.AddModelError("", err);
+                foreach (var err in resError)
+                {
+                    ModelState.AddModelError("", err);
+                }
             }
+            
             return View();
         }
 
@@ -122,7 +148,9 @@ namespace ProjetGED.Controllers
         {
             if (disposing && userManager != null)
             {
+              
                 userManager.Dispose();
+
             }
             base.Dispose(disposing);
         }
