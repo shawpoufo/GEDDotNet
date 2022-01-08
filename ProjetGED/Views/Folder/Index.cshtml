@@ -1,8 +1,26 @@
-﻿
+﻿@using ProjetGED.Models
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-<h2>Path : @ViewData["foldersUrl"]</h2>
+<h2>Folder : </h2>
 
+<p>
+    Hello @User.Identity.Name
+</p>
+@foreach (var folder in ((List<Folder>)ViewData["folders"]))
+{
+    @Html.Label(folder.Name)
+    @Html.Label(folder.Path)
+    @Html.Label(folder.CreatedAt.ToShortDateString())
+}
+
+@foreach (var document in ((List<Document>)ViewData["documents"]))
+{
+    @Html.Label(document.Name);  
+    <span>:</span>
+    @Html.Label(document.Path); <br />
+}
+<p>
+    <a href="@Url.Action("logout", "auth")">Log Out</a>
+</p>

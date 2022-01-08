@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Web;
 
 namespace ProjetGED
@@ -9,6 +11,6 @@ namespace ProjetGED
     public class ApplicationUser:IdentityUser
     {
         // add more properties
-        public string LeNom { get; set; }
+      
     }
 }

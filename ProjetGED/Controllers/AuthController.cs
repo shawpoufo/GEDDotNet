@@ -115,7 +115,7 @@ namespace ProjetGED.Controllers
                             if (Startup.DBContext.SaveChanges() > 0)
                             {
                                 Directory.CreateDirectory(Server.MapPath("~") + "cloud\\" + newUser.Id);
-                                newUser.Folders.Add(new Folder { CreatedAt = DateTime.Now, Parent = null, Name = newUser.Id.ToString(), Path = Server.MapPath("~") + "cloud\\" + newUser.Id });
+                                newUser.Folders.Add(new Folder { CreatedAt = DateTime.Now, Parent = null, Name = newUser.Id.ToString(), Path = newUser.Id.ToString() });
                                 Startup.DBContext.SaveChanges();
                                 transaction.Commit();
                             }

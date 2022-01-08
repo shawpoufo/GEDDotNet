@@ -27,6 +27,12 @@
     </div>
 
     <div class="container body-content">
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            Html.RenderPartial("_Upload");
+            <hr />
+        }
         @RenderBody()
         <hr />
         <footer>

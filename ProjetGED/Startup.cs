@@ -50,9 +50,6 @@ namespace ProjetGED
             };
         }
 
-        ~Startup()
-        {
-            
-        }
+  
     }
 }

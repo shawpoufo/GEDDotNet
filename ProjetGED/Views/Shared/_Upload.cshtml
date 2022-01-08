@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "_Upload";
+    var currentFolderPath = Request.RawUrl;
+    if (!string.IsNullOrWhiteSpace(currentFolderPath))
+    {
+        if (currentFolderPath == "/Folder")
+        { currentFolderPath = ""; }
+        else
+        { currentFolderPath = currentFolderPath.Remove(0, 8); }
+    }
+}
+
+<h2>_Upload</h2>
+
+@using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<div>
+    @Html.TextBox("document", "", new { type = "file" }) <br />
+    @Html.Hidden("currentFolderPath", currentFolderPath)
+    <input type="submit" value="Upload" />
+
+    @if( (TempData["message"] as string)  != null)
+    {
+        var message = TempData["message"] as string;
+        <p>@message  </p>
+        
+    }
+</div>
+}

@@ -15,6 +15,7 @@ namespace ProjetGED
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            
         }
     }
 }

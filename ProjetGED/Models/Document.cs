@@ -14,6 +14,7 @@ namespace ProjetGED.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Version { get; set; }
+        public string Path { get; set; }
         //[ForeignKey("Author")]
         public User Author { get; set; }
         //[ForeignKey("Folder")]
