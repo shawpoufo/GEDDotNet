@@ -1,30 +1,56 @@
-﻿
+﻿@model int
 @{
     ViewBag.Title = "_Upload";
-    var currentFolderPath = Request.RawUrl;
+    var currentFolderPath = Request.RawUrl.ToLower();
     if (!string.IsNullOrWhiteSpace(currentFolderPath))
     {
-        if (currentFolderPath == "/Folder")
-        { currentFolderPath = ""; }
-        else
+        //14
+
+        if (currentFolderPath.Contains("folder/"))
         { currentFolderPath = currentFolderPath.Remove(0, 8); }
+        else
+        { currentFolderPath = currentFolderPath.Remove(0, 7); }
+        currentFolderPath = currentFolderPath.Replace('/', '\\');
     }
 }
 
 <h2>_Upload</h2>
-
-@using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
 <div>
-    @Html.TextBox("document", "", new { type = "file" }) <br />
-    @Html.Hidden("currentFolderPath", currentFolderPath)
-    <input type="submit" value="Upload" />
-
-    @if( (TempData["message"] as string)  != null)
+    @using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        var message = TempData["message"] as string;
-        <p>@message  </p>
-        
+        <div>
+            @Html.TextBox("document", "", new { type = "file", multiple = "multiple" }) <br />
+            @Html.Hidden("currentFolderPath", currentFolderPath)
+            @Html.Hidden("userId",Model)
+            <input type="submit" value="Upload" />
+
+            @if ((TempData["message"] as string) != null)
+            {
+                var message = TempData["message"] as string;
+                <p>@message  </p>
+
+            }
+        </div>
     }
 </div>
-}
+<div>
+    @using (Html.BeginForm("Upload", "Folder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    <div>
+        @Html.TextBox("uploadeFolder", "", new { type = "file", webkitdirectory = "webkitdirectory" }) <br />
+        @Html.Hidden("currentFolderPath", currentFolderPath)
+        @Html.Hidden("userId", Model)
+        <input type="submit" value="Upload" />
+
+        @if ((TempData["msgUpFolder"] as string) != null)
+        {
+            var message = TempData["msgUpFolder"] as string;
+            <p>@message  </p>
+
+        }
+    </div>
+    }
+</div>
+<script>
+
+</script>

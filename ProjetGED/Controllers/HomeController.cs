@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetGED.ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -25,7 +26,7 @@ namespace ProjetGED.Controllers
             //    ViewData["folders"] = user.Folders.ToList().FindAll(f => f.Parent == rootFolder);
             //    ViewData["files"] = rootFolder.Documents;
             //}
-            return RedirectToAction("Index", "Folder");
+            return RedirectToAction("Index", "Folder",new { slug = this.UserId()});
         }
         [Authorize(Roles = "admin")]
         public ActionResult OnlyAdmin()

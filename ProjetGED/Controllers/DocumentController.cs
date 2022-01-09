@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetGED.ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace ProjetGED.Controllers
         public ActionResult Upload()
         {
             TempData["message"] = "";
-            return PartialView("_Upload");
+            return PartialView("_Upload",this.UserId());
         }
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase document , string currentFolderPath)
@@ -29,26 +30,30 @@ namespace ProjetGED.Controllers
             {
                 if (document.ContentLength > 0)
                 {
-                    var claimsIdentity = User.Identity as ClaimsIdentity;
-                    var userId = Convert.ToInt32(claimsIdentity.FindFirst("UserId").Value);
                     string fileName = Path.GetFileName(document.FileName);
-                    //string dbPath = Path.Combine(userId.ToString(),currentFolderPath, _FileName);
                     int version = 0;
                     // store the document in the DB
                     using (var context = new GEDContext())
                     {
+                        int userId = this.UserId();
                         var user = context.OurUsers.Include("Folders").Where(u => u.Id == userId).First();
-                        var fullCurrentFolderPath = Path.Combine(userId.ToString(), currentFolderPath);
-                        var folder = user.Folders.Where(f => f.Path == fullCurrentFolderPath).First();
+                        var folder = user.Folders.Where(f => f.ComparePath(currentFolderPath)).First();
                         // load documents folder (current folder)
                         context.Entry(folder).Collection(f => f.Documents).Load();
                         // increment version if file existe
                         if(folder.Documents.ToList().Exists(d => d.Name.ToLower() == fileName.ToLower()))
                         {
-                            version = folder.Documents.Where(d => d.Name == fileName).Select(d => d.Version).First();
+                            version = folder.Documents.Where(d => d.Name == fileName).OrderBy(d => d.Version).Select(d => d.Version).Last();
                             version++;
                         }
-                        context.Documents.Add(new Models.Document { Author = user, Folder = folder, Name = fileName, UploadedAt = DateTime.Now ,Version = version , Path = Path.Combine(userId.ToString(), currentFolderPath, fileName) });
+                        context.Documents.Add(new Models.Document {
+                            Author = user,
+                            Folder = folder,
+                            Name = fileName,
+                            UploadedAt = DateTime.Now ,
+                            Version = version ,
+                            Path = Path.Combine(currentFolderPath, fileName)
+                        });
                         context.SaveChanges();
                     }
                     // add version to physical file name if he existe already
@@ -58,16 +63,18 @@ namespace ProjetGED.Controllers
                         fileName = fileName.Insert(dotIndex, "(" + version + ")");
                     }
                     // store the document physically
-                    string _physicalPath = Path.Combine(Server.MapPath("~/cloud"), userId.ToString(), currentFolderPath, fileName);
+                    string _physicalPath = Path.Combine(Server.MapPath("~/cloud") , currentFolderPath, fileName);
                     document.SaveAs(_physicalPath);
                 }
                 TempData["message"] = "File Uploaded Successfully!!";
-                return RedirectToAction("Index", "Folder",new { slug = currentFolderPath });
+                
+                return RedirectToAction("Index", "Folder",new {slug = currentFolderPath });
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 TempData["message"] = "File upload failed!!";
-                return RedirectToAction("Index", "Folder", new { slug = currentFolderPath });
+                return RedirectToAction("Index", "Folder", new {slug = currentFolderPath });
             }
         }
     }

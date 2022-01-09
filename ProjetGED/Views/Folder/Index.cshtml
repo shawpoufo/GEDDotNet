@@ -8,19 +8,37 @@
 <p>
     Hello @User.Identity.Name
 </p>
-@foreach (var folder in ((List<Folder>)ViewData["folders"]))
-{
-    @Html.Label(folder.Name)
-    @Html.Label(folder.Path)
-    @Html.Label(folder.CreatedAt.ToShortDateString())
-}
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>Icon</th>
+            <th>Name</th>
+            <th>Created At</th>
+            <th>Version</th>
+        </tr>
+    </thead>   
+    <tbody>
+        @foreach (var folder in ((List<Folder>)ViewData["folders"]))
+        {
+            <tr>
+                <td>Folder</td>
+                <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\','/') }, null)</td>
+                <td>@folder.CreatedAt.ToShortDateString()</td>
+                <td></td>
+            </tr>
+        }
+        @foreach (var document in ((List<Document>)ViewData["documents"]))
+        {
+            <tr>
+                <td>Documents</td>
+                <td>@Html.ActionLink(document.Name, "Index", "Document", new { slug = @document.Path.Replace('\\', '/') }, null)</td>
+                <td>@document.UploadedAt.ToShortDateString()</td>
+                <td>@document.Version</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-@foreach (var document in ((List<Document>)ViewData["documents"]))
-{
-    @Html.Label(document.Name);  
-    <span>:</span>
-    @Html.Label(document.Path); <br />
-}
 <p>
     <a href="@Url.Action("logout", "auth")">Log Out</a>
 </p>
