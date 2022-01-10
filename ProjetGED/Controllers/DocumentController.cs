@@ -22,14 +22,14 @@ namespace ProjetGED.Controllers
         public ActionResult Upload()
         {
             TempData["message"] = "";
-            return PartialView("_Upload",this.UserId());
+            return PartialView("_Upload", this.UserId());
         }
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase document , string currentFolderPath)
         {
             try
             {
-                if (document.ContentLength > 0)
+                if (document != null)
                 {
                     string fileName = Path.GetFileName(document.FileName);
                     int version = 0;
@@ -66,15 +66,18 @@ namespace ProjetGED.Controllers
                     // store the document physically
                     string _physicalPath = Path.Combine(Server.MapPath("~/cloud") , currentFolderPath, fileName);
                     document.SaveAs(_physicalPath);
+                    TempData["message"] = (isValide: true, message: "document charger avec success !!");
                 }
-                TempData["message"] = "File Uploaded Successfully!!";
-                
+                else
+                    TempData["message"] = (isValide: false, message: "aucun document n'est selectionner!!");
+
+
                 return RedirectToAction("Index", "Folder",new {slug = currentFolderPath });
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                TempData["message"] = "File upload failed!!";
+                TempData["message"] = (isValid:false,message:"une érreur est produite pendant le chargement !!");
                 return RedirectToAction("Index", "Folder", new {slug = currentFolderPath });
             }
         }

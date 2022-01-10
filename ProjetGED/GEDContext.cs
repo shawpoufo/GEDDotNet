@@ -14,7 +14,7 @@ namespace ProjetGED
             : base("name=EFGEDModel")
         {
             
-            Database.SetInitializer(new DropCreateDatabaseAlways<GEDContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<GEDContext>());
             
         }
         public DbSet<User> OurUsers { get; set; }

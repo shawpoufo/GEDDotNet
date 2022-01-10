@@ -13,7 +13,7 @@ namespace ProjetGED.Controllers
     {
         public ActionResult Upload()
         {
-            TempData["msgUpFolder"] = "";
+            TempData["msgUpFolder"] = (isValid:true,message:"");
             return View();
         }
         [HttpPost]
@@ -23,7 +23,7 @@ namespace ProjetGED.Controllers
             //crée le dossier s'il n"xiste pas
             //path = userId + currentFolderPath + (extraire nom du dossier)
             //puis crée les document directement sans vérifier car le fichier est nouveau
-            if(uploadeFolder.Count() > 0)
+            if(uploadeFolder.Count() > 0 && uploadeFolder.First() != null)
             {
                 try
                 {
@@ -70,11 +70,11 @@ namespace ProjetGED.Controllers
                                 {
                                     document.SaveAs(Path.Combine(physicalFolderPath, Path.GetFileName(document.FileName)));
                                 }
-                                TempData["msgUpFolder"] = "le Dossier est stocker avec success";
+                                TempData["msgUpFolder"] = (isValid:true,message:"le Dossier est sauvegarder avec success");
                             }
                         }
                         else
-                            TempData["msgUpFolder"] = "le Dossier existe déja";
+                            TempData["msgUpFolder"] = (isValid:false,message:"le Dossier existe déja");
 
                     }
                     
@@ -82,11 +82,11 @@ namespace ProjetGED.Controllers
                 catch 
                 {
 
-                    TempData["msgUpFolder"] = "le Dossier n'a pas était charger";
+                    TempData["msgUpFolder"] = (isValid: false, message: "le Dossier n'a pas était charger");
                 }
             }
             else
-                TempData["msgUpFolder"] = "impossible de charger un dossier vide";
+                TempData["msgUpFolder"] = (isValid:false,message:"aucun dossier selectionner !");
 
             return RedirectToAction("Index", new { slug = currentFolderPath });
         }

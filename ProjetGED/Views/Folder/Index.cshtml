@@ -1,15 +1,14 @@
 ﻿@using ProjetGED.Models
+@using System.Security.Claims
 @{
     ViewBag.Title = "Index";
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    int userId = Convert.ToInt32(claimsIdentity.FindFirst("UserId").Value);
+    Html.RenderPartial("_Upload", userId);
 }
-
+<hr />
 @{Html.RenderPartial("_Breadcrumb"); }
-<h2>Folder : </h2>
-
-<p>
-    Hello @User.Identity.Name
-</p>
-<table class="table table-dark table-hover">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Icon</th>
@@ -21,8 +20,8 @@
     <tbody>
         @foreach (var folder in ((List<Folder>)ViewData["folders"]))
         {
-            <tr>
-                <td>Folder</td>
+            <tr class="table-secondary">
+                <td><i class="fa fa-folder-open-o"></i></td>
                 <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\', '/') }, null)</td>
                 <td>@folder.CreatedAt.ToShortDateString()</td>
                 <td></td>
@@ -30,8 +29,8 @@
         }
         @foreach (var document in ((List<Document>)ViewData["documents"]))
         {
-            <tr>
-                <td>Documents</td>
+            <tr >
+                <td><i class="fa fa-file text-primary"></i></td>
                 <td>@Html.ActionLink(document.Name, "Display", "Document", new { docPath = @document.Path.Replace('\\', '/') }, null)</td>
                 <td>@document.UploadedAt.ToShortDateString()</td>
                 <td>@document.Version</td>

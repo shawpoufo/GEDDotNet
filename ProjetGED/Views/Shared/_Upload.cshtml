@@ -12,9 +12,24 @@
         { currentFolderPath = currentFolderPath.Remove(0, 7); }
         currentFolderPath = currentFolderPath.Replace('/', '\\');
     }
+
+    string msgDocClass = "", msgDoc = "";
+    if (TempData.ContainsKey("message"))
+    {
+        var (isValid,message) = ((bool,string))TempData["message"];
+        msgDocClass = isValid ? "text-success" : "text-danger";
+        msgDoc = message;
+    }
+    string msgFolderClass = "", msgFolder = "";
+    if (TempData.ContainsKey("msgUpFolder"))
+    {
+        var (isValid, message) = ((bool, string))TempData["msgUpFolder"];
+        msgFolderClass = isValid ? "text-success" : "text-danger";
+        msgFolder = message;
+    }
 }
 
-<h2>_Upload</h2>
+<h2>Telecharger</h2>
 <div class="container">
     <div class="row">
 
@@ -22,17 +37,14 @@
             @using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div>
-                    @Html.TextBox("document", "", new { type = "file", multiple = "multiple" ,@class="form-control" }) <br />
+                    @Html.TextBox("document", "", new { type = "file" ,@class="form-control" }) <br />
                     @Html.Hidden("currentFolderPath", currentFolderPath)
                     @Html.Hidden("userId", Model)
-                    <input type="submit" value="Upload" class="btn btn-primary"/>
+                    <input type="submit" value="Charger" class="btn btn-primary"/>
 
-                    @if ((TempData["message"] as string) != null)
-                    {
-                        var message = TempData["message"] as string;
-                        <p class="text-info fw-bold">@message  </p>
+                   
+                    <p class="fw-bold @msgDocClass">@msgDoc  </p>
 
-                    }
                 </div>
             }
         </div>
@@ -43,14 +55,10 @@
                     @Html.TextBox("uploadeFolder", "", new { type = "file", webkitdirectory = "webkitdirectory", @class = "form-control" }) <br />
                     @Html.Hidden("currentFolderPath", currentFolderPath)
                     @Html.Hidden("userId", Model)
-                    <input type="submit" value="Upload" class="btn btn-primary"/>
+                    <input type="submit" value="Charger" class="btn btn-primary"/>
 
-                    @if ((TempData["msgUpFolder"] as string) != null)
-                    {
-                        var message = TempData["msgUpFolder"] as string;
-                        <p>@message  </p>
-
-                    }
+                     <p class="fw-bold @msgFolderClass">@msgFolder  </p>
+                    
                 </div>
             }
         </div>
