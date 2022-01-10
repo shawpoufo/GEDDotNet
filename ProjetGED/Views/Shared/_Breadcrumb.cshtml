@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "_Breadcrumb";
+    // supprimer /folder/ sinon elle sera repeter dans l'url
+    string url = Request.RawUrl.Remove(0,8);
+    SortedList<int, string> paths = new SortedList<int, string>();
+    for (int i = 0; i < url.Length; i++)
+    {
+        if (url[i] == '/' && i < url.Length - 1)
+        {
+            paths.Add(i, url.Substring(0, i));
+        }
+    }
+
+
+}
+
+<h2>Paths : </h2>
+@{
+    int j = 0;
+    var names = url.Split('/');
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+
+        @foreach (var keyValue in paths)
+        {
+            <li class="breadcrumb-item active">
+                @Html.ActionLink(names[j], "Index", "Folder", new { slug = keyValue.Value }, null)
+            </li>
+
+            j++;
+        }
+            <li class="breadcrumb-item" aria-current="page"> @names[names.Length - 1] </li>   
+    </ol>
+
+</nav>
+

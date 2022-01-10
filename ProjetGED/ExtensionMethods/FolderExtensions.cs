@@ -14,14 +14,6 @@ namespace ProjetGED.ExtensionMethods
         {
             return @folder.Path.ToLower() == @path.Replace('/', '\\').ToLower();
         }
-        /// <summary>
-        /// retourner le  Path sans le fichier root 
-        /// cette fonction est utiliser seulement dans l'affichage parceque userId qui est le nom du fichier root
-        /// sera ajouter automatiquement par la fonction Html.ActionLink
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        
+       
     }
 }

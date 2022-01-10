@@ -3,6 +3,7 @@
     ViewBag.Title = "Index";
 }
 
+@{Html.RenderPartial("_Breadcrumb"); }
 <h2>Folder : </h2>
 
 <p>
@@ -16,13 +17,13 @@
             <th>Created At</th>
             <th>Version</th>
         </tr>
-    </thead>   
+    </thead>
     <tbody>
         @foreach (var folder in ((List<Folder>)ViewData["folders"]))
         {
             <tr>
                 <td>Folder</td>
-                <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\','/') }, null)</td>
+                <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\', '/') }, null)</td>
                 <td>@folder.CreatedAt.ToShortDateString()</td>
                 <td></td>
             </tr>
