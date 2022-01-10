@@ -15,41 +15,46 @@
 }
 
 <h2>_Upload</h2>
-<div>
-    @using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div>
-            @Html.TextBox("document", "", new { type = "file", multiple = "multiple" }) <br />
-            @Html.Hidden("currentFolderPath", currentFolderPath)
-            @Html.Hidden("userId",Model)
-            <input type="submit" value="Upload" />
+<div class="container">
+    <div class="row">
 
-            @if ((TempData["message"] as string) != null)
+        <div class="col">
+            @using (Html.BeginForm("Upload", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                var message = TempData["message"] as string;
-                <p>@message  </p>
+                <div>
+                    @Html.TextBox("document", "", new { type = "file", multiple = "multiple" ,@class="form-control" }) <br />
+                    @Html.Hidden("currentFolderPath", currentFolderPath)
+                    @Html.Hidden("userId", Model)
+                    <input type="submit" value="Upload" class="btn btn-primary"/>
 
+                    @if ((TempData["message"] as string) != null)
+                    {
+                        var message = TempData["message"] as string;
+                        <p class="text-info fw-bold">@message  </p>
+
+                    }
+                </div>
             }
         </div>
-    }
-</div>
-<div>
-    @using (Html.BeginForm("Upload", "Folder", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-    <div>
-        @Html.TextBox("uploadeFolder", "", new { type = "file", webkitdirectory = "webkitdirectory" }) <br />
-        @Html.Hidden("currentFolderPath", currentFolderPath)
-        @Html.Hidden("userId", Model)
-        <input type="submit" value="Upload" />
+        <div class="col">
+            @using (Html.BeginForm("Upload", "Folder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div>
+                    @Html.TextBox("uploadeFolder", "", new { type = "file", webkitdirectory = "webkitdirectory", @class = "form-control" }) <br />
+                    @Html.Hidden("currentFolderPath", currentFolderPath)
+                    @Html.Hidden("userId", Model)
+                    <input type="submit" value="Upload" class="btn btn-primary"/>
 
-        @if ((TempData["msgUpFolder"] as string) != null)
-        {
-            var message = TempData["msgUpFolder"] as string;
-            <p>@message  </p>
+                    @if ((TempData["msgUpFolder"] as string) != null)
+                    {
+                        var message = TempData["msgUpFolder"] as string;
+                        <p>@message  </p>
 
-        }
+                    }
+                </div>
+            }
+        </div>
     </div>
-    }
 </div>
 <script>
 

@@ -1,4 +1,5 @@
 ﻿using ProjetGED.ExtensionMethods;
+using ProjetGED.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,6 +77,23 @@ namespace ProjetGED.Controllers
                 TempData["message"] = "File upload failed!!";
                 return RedirectToAction("Index", "Folder", new {slug = currentFolderPath });
             }
+        }
+
+        public ActionResult Display(string docPath)
+        {
+            using (var context = new GEDContext())
+            {
+                int userId = this.UserId();
+                var user = context.OurUsers.Include("Documents").Where(u => u.Id == userId).First();
+                // a ajouter : vérifier dans la table privilege
+                if (!user.Documents.ToList().Exists(d => d.ComparePath(docPath)))
+                    return new HttpNotFoundResult("document introuvable");
+            }
+            string fileName = Path.GetFileName(docPath);
+            byte[] doc = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath("~/cloud"), docPath));
+            string mimeType = MimeMapping.GetMimeMapping(fileName);//"application/pdf"
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
+            return File(doc, mimeType);
         }
     }
 }

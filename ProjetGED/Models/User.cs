@@ -18,9 +18,11 @@ namespace ProjetGED.Models
         //[Index(IsUnique = true)]
         public string Email { get; set; }
         public ICollection<Folder> Folders { get; set; }
+        public ICollection<Document> Documents { get; set; }
         public User()
         {
             Folders = new List<Folder>();
+            Documents = new List<Document>();
         }
     }
 }

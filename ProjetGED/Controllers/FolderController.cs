@@ -55,6 +55,7 @@ namespace ProjetGED.Controllers
                                 newFolder.Documents.Add(new Document
                                 {
                                     Name = name,
+                                    Author = user,
                                     Path = Path.Combine(newFolder.Path, name),
                                     UploadedAt = DateTime.Now,
                                     Version = 0

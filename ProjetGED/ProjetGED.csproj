@@ -184,6 +184,7 @@
     <Compile Include="Controllers\FolderController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WelcomController.cs" />
+    <Compile Include="ExtensionMethods\DocumentExtension.cs" />
     <Compile Include="ExtensionMethods\FolderExtensions.cs" />
     <Compile Include="ExtensionMethods\UserPropertyExtension.cs" />
     <Compile Include="GEDContext.cs" />

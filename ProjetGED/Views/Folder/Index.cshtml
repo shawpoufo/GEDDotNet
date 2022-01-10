@@ -32,7 +32,7 @@
         {
             <tr>
                 <td>Documents</td>
-                <td>@Html.ActionLink(document.Name, "Index", "Document", new { slug = @document.Path.Replace('\\', '/') }, null)</td>
+                <td>@Html.ActionLink(document.Name, "Display", "Document", new { docPath = @document.Path.Replace('\\', '/') }, null)</td>
                 <td>@document.UploadedAt.ToShortDateString()</td>
                 <td>@document.Version</td>
             </tr>
