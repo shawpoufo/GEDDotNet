@@ -15,6 +15,7 @@
             <th>Name</th>
             <th>Created At</th>
             <th>Version</th>
+            <th>Gérer</th>
         </tr>
     </thead>
     <tbody>
@@ -25,15 +26,25 @@
                 <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\', '/') }, null)</td>
                 <td>@folder.CreatedAt.ToShortDateString()</td>
                 <td></td>
+                <td>
+                    <button  type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageView">
+                        <i class="fa fa-cogs"></i>
+                    </button>
+                </td>
             </tr>
         }
         @foreach (var document in ((List<Document>)ViewData["documents"]))
         {
-            <tr >
+            <tr>
                 <td><i class="fa fa-file text-primary"></i></td>
                 <td>@Html.ActionLink(document.Name, "Display", "Document", new { docPath = @document.Path.Replace('\\', '/') }, null)</td>
                 <td>@document.UploadedAt.ToShortDateString()</td>
                 <td>@document.Version</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageView">
+                        <i class="fa fa-cogs"></i>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
@@ -42,3 +53,19 @@
 <p>
     <a href="@Url.Action("logout", "auth")">Log Out</a>
 </p>
+<div id="manageView" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="manageViewLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="manageViewLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
