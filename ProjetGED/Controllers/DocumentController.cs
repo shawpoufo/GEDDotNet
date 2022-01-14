@@ -98,5 +98,9 @@ namespace ProjetGED.Controllers
             Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
             return File(doc, mimeType);
         }
+
+
+        
+
     }
 }

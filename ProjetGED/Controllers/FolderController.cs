@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+
 namespace ProjetGED.Controllers
 {
     public class FolderController : Controller
@@ -16,6 +17,7 @@ namespace ProjetGED.Controllers
             TempData["msgUpFolder"] = (isValid:true,message:"");
             return View();
         }
+
         [HttpPost]
         [Route("Folder/Upload")]
         public ActionResult Upload(IEnumerable<HttpPostedFileBase> uploadeFolder,string currentFolderPath)
@@ -27,6 +29,7 @@ namespace ProjetGED.Controllers
             {
                 try
                 {
+
 
                     using (var context = new GEDContext())
                     {
@@ -113,11 +116,96 @@ namespace ProjetGED.Controllers
                         return new HttpNotFoundResult("Ce dossier n'existe pas");
 
                 }
+                var accessDocumentId = context.AccessDocuments.Where(u => u.userId == id).Select(u => u.documentId);
+                var accessDocument = new List<Document>();
+                foreach(var acc in accessDocumentId)
+                {
+                   accessDocument.Add(context.Documents.Find(acc));
+                }
+
+                var accessFolderId = context.AccessFolders.Where(u => u.userId == id).Select(u => u.folderId);
+                var accessFolder = new List<Folder>();
+                foreach (var acc in accessFolderId)
+                {
+                    accessFolder.Add(context.Folders.Find(acc));
+                }
+
                 context.Entry(folder).Collection(r => r.Documents).Load();
                 ViewData["folders"] = user.Folders.ToList().FindAll(f => f.Parent == folder);
                 ViewData["documents"] = folder.Documents;
+                //
+                ViewData["accessDocument"] = accessDocument;
+                ViewData["accessFolder"] = accessFolder;
+                ViewData["users"] = context.OurUsers.ToList();
+                ViewBag.folderId = slug;
             }
             return View();
         }
+
+        [HttpPost]
+        [Route("Folder/Access")]
+        public ActionResult Access(string userFolder,string folderId,string read,string write,string download)
+        {
+            //Console.WriteLine("User Id ="+userFolder);
+            //Console.WriteLine("Folder Id =" + folderId);
+
+
+            using (var context = new GEDContext())
+            {
+                //var accessFolders = context.AccessFolders.FirstOrDefault(a => a.folderId == Int16.Parse(folderId
+
+                //insert in accessFolders
+
+
+                var v_read = (read=="true") ? 1 : 0;
+                var v_write = (write == "true") ? 1 : 0;
+                var v_download = (download == "true") ? 1 : 0;
+
+
+
+                AccessFolder accessFolder = new AccessFolder(2, Int16.Parse(userFolder), Int16.Parse(folderId), v_read, v_write, v_download);
+               
+
+                context.AccessFolders.Add(accessFolder);
+                context.SaveChanges();
+            }
+            
+
+            return RedirectToAction("Index", new { slug = userFolder});
+        }
+
+
+        [HttpPost]
+        [Route("Folder/DocumentAccess")]
+        public ActionResult DocumentAccess(string userFolder, string documentId, string read, string write, string download)
+        {
+            //Console.WriteLine("User Id ="+userFolder);
+            //Console.WriteLine("Folder Id =" + folderId);
+
+
+            using (var context = new GEDContext())
+            {
+                //var accessFolders = context.AccessFolders.FirstOrDefault(a => a.folderId == Int16.Parse(folderId
+
+                //insert in accessFolders
+
+
+                var v_read = (read == "true") ? 1 : 0;
+                var v_write = (write == "true") ? 1 : 0;
+                var v_download = (download == "true") ? 1 : 0;
+
+
+
+                AccessDocument accessDocument = new AccessDocument(Int16.Parse(userFolder), Int16.Parse(documentId), v_read, v_write, v_download);
+
+
+                context.AccessDocuments.Add(accessDocument);
+                context.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index", new { slug = userFolder });
+        }
+
     }
 }

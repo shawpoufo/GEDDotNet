@@ -18,20 +18,71 @@
             <th>Gérer</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var folder in ((List<Folder>)ViewData["folders"]))
         {
+
+
             <tr class="table-secondary">
                 <td><i class="fa fa-folder-open-o"></i></td>
                 <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\', '/') }, null)</td>
                 <td>@folder.CreatedAt.ToShortDateString()</td>
                 <td></td>
                 <td>
-                    <button  type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageView">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageView">
                         <i class="fa fa-cogs"></i>
                     </button>
                 </td>
             </tr>
+
+            <div id="manageView" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="manageViewLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="manageViewLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        @using (Html.BeginForm("Access", "Folder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="modal-body">
+
+                                <input name="folderId" type="hidden" value="@folder.Id" />
+
+                                <select class="form-select" name="userFolder">
+
+                                    @foreach (var us in ((List<User>)ViewData["users"]))
+                                    {
+                                        <option selected>Select user to add</option>
+                                        <option value="@us.Id">@us.Name</option>
+                                    }
+
+
+                                </select>
+
+
+
+                                <label>Read</label>
+                                <input type="checkbox" name="read" value="true" />&nbsp;&nbsp;&nbsp;
+
+                                <label>Write</label>
+                                <input type="checkbox" name="write" value="true" />&nbsp;&nbsp;&nbsp;
+
+                                <label>Download</label>
+                                <input type="checkbox" name="download" value="true" />&nbsp;&nbsp;&nbsp;
+
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         }
         @foreach (var document in ((List<Document>)ViewData["documents"]))
         {
@@ -41,31 +92,124 @@
                 <td>@document.UploadedAt.ToShortDateString()</td>
                 <td>@document.Version</td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageView">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageViewDocument">
                         <i class="fa fa-cogs"></i>
                     </button>
                 </td>
             </tr>
+
+            <div id="manageViewDocument" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="manageViewLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="manageViewLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        @using (Html.BeginForm("DocumentAccess", "Folder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="modal-body">
+
+                                <input name="documentId" type="hidden" value="@document.Id" />
+
+                                <select class="form-select" name="userFolder">
+
+                                    @foreach (var us in ((List<User>)ViewData["users"]))
+                                    {
+                                        <option selected>Select user to add</option>
+                                        <option value="@us.Id">@us.Name</option>
+                                    }
+
+
+                                </select>
+
+
+
+                                <label>Read</label>
+                                <input type="checkbox" name="read" value="true" />&nbsp;&nbsp;&nbsp;
+
+                                <label>Write</label>
+                                <input type="checkbox" name="write" value="true" />&nbsp;&nbsp;&nbsp;
+
+                                <label>Download</label>
+                                <input type="checkbox" name="download" value="true" />&nbsp;&nbsp;&nbsp;
+
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
         }
     </tbody>
 </table>
 
+
+<h4>Shared Folders and Documents</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Icon</th>
+            <th>Name</th>
+            <th>Created At</th>
+            <th>Version</th>
+            <th>Gérer</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var folder in ((List<Folder>)ViewData["accessFolder"]))
+        {
+
+
+            <tr class="table-secondary">
+                <td><i class="fa fa-folder-open-o"></i></td>
+                <td>@Html.ActionLink(folder.Name, "Index", "Folder", new { slug = @folder.Path.Replace('\\', '/') }, null)</td>
+                <td>@folder.CreatedAt.ToShortDateString()</td>
+                <td></td>
+                <td>
+                    <button type="button" class="btn btn-secondary disabled" data-bs-toggle="modal" data-bs-target="#">
+                        <i class="fa fa-cogs"></i>
+                    </button>
+                </td>
+            </tr>
+
+           
+        }
+        @foreach (var document in ((List<Document>)ViewData["accessDocument"]))
+        {
+            <tr>
+                <td><i class="fa fa-file text-primary"></i></td>
+                <td>@Html.ActionLink(document.Name, "Display", "Document", new { docPath = @document.Path.Replace('\\', '/') }, null)</td>
+                <td>@document.UploadedAt.ToShortDateString()</td>
+                <td>@document.Version</td>
+                <td>
+                    <button type="button" class="btn btn-primary disabled" data-bs-toggle="modal" data-bs-target="#">
+                        <i class="fa fa-cogs"></i>
+                    </button>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+
 <p>
     <a href="@Url.Action("logout", "auth")">Log Out</a>
 </p>
-<div id="manageView" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="manageViewLabel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="manageViewLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+
+
+
+
+
