@@ -16,6 +16,7 @@ namespace ProjetGED.Controllers
             TempData["msgUpFolder"] = (isValid:true,message:"");
             return View();
         }
+        
         [HttpPost]
         [Route("Folder/Upload")]
         public ActionResult Upload(IEnumerable<HttpPostedFileBase> uploadeFolder,string currentFolderPath)

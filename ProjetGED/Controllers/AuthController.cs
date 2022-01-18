@@ -21,7 +21,7 @@ namespace ProjetGED.Controllers
         public AuthController()
             :this(Startup.UserManagerFactory.Invoke())
         {
-
+            
         }
 
         public AuthController(UserManager<ApplicationUser> userManager)

@@ -27,9 +27,12 @@
                 <td>@folder.CreatedAt.ToShortDateString()</td>
                 <td></td>
                 <td>
-                    <button  type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageView">
-                        <i class="fa fa-cogs"></i>
-                    </button>
+                    @*<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#manageView">
+                            <i class="fa fa-cogs"></i>
+                        </button>*@
+                    @Ajax.ActionLink("a", "index", "FolderPrivilege", new { path = folder.Path }, new AjaxOptions { HttpMethod="GET",InsertionMode=InsertionMode.Replace,UpdateTargetId = "privilegeList" },
+                   new { @class = "btn btn-secondary ajax-link folder-link" })
+
                 </td>
             </tr>
         }
@@ -41,9 +44,8 @@
                 <td>@document.UploadedAt.ToShortDateString()</td>
                 <td>@document.Version</td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageView">
-                        <i class="fa fa-cogs"></i>
-                    </button>
+                    @Ajax.ActionLink("a", "index", "DocumentPrivilege", new { path= document.Path }, new AjaxOptions { HttpMethod="GET",InsertionMode=InsertionMode.Replace,UpdateTargetId = "privilegeList" },
+                   new { @class = "btn btn-secondary ajax-link doc-link" })
                 </td>
             </tr>
         }
@@ -53,15 +55,38 @@
 <p>
     <a href="@Url.Action("logout", "auth")">Log Out</a>
 </p>
+@*@Ajax.BeginForm("AddOrUpdateFolderPrivilege", "Privilege", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", UpdateTargetId = "privilege-list" })*@
 <div id="manageView" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="manageViewLabel">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="manageViewLabel">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
+                <select id="select-search" style="width: 100%"></select>
+                <div class="text-danger" id="newUserIdMessage"></div>
+                <input type="hidden" name="NewUserId" id="newUserId" value="" />
+
+                <div>
+                    Lecture <input type="checkbox" name="Read" id="read" value="true" />
+                    Modification <input type="checkbox" name="Write" id="write" value="true" />
+                    Telechargement <input type="checkbox" name="DownLoad" id="download" value="true" />
+                    <div class="text-danger" id="choiceMessage"></div>
+                </div>
+                <div id="privilege-strategy-div">
+                    <div>
+                        <input type="radio" name="rb-privilege-strategy" value="directe" checked /> Appliquer sur les document dirrecte
+                    </div>
+                    <div>
+                        <input type="radio" name="rb-privilege-strategy" value="tree" /> Appliquer sur tous sous fichier et sous documents
+                    </div>
+                </div>
+                <button id="btnPrivilegeAdd" type="button" class="btn btn-primary">Ajouter</button>
+                <button id="btn-cancel-update" type="button" class="btn btn-outline-dark" style="display:none;">Annuler</button>
+                <input type="hidden" name="form-state" id="form-state" value="new" />
+
+                <div id="privilegeList"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -69,3 +94,18 @@
         </div>
     </div>
 </div>
+
+@section IndexFolderScript{
+    <script>
+        $('.ajax-link').attr('data-bs-toggle', 'modal')
+        $('.ajax-link').attr('data-bs-target', '#manageView')
+        $('.ajax-link').html("<i class=\"fa fa-cogs\"></i>")
+        $('.doc-link').click(e => {
+            $('#privilege-strategy-div').css("display",'none')
+        })
+        $('.folder-link').click(e => {
+            $('#privilege-strategy-div').css("display", 'block')
+        })
+    </script>
+    <script src="~/Scripts/DeletePrivilege.js"></script>
+}

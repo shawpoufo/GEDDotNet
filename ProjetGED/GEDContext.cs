@@ -14,12 +14,15 @@ namespace ProjetGED
             : base("name=EFGEDModel")
         {
             
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<GEDContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<GEDContext>());
             
         }
         public DbSet<User> OurUsers { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Folder> Folders { get; set; }
+        public DbSet<FolderPrivilege> FolderPrivileges { get; set; }
+        public DbSet<DocumentPrivilege> DocumentPrivileges { get; set; }
+        
         /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }*/

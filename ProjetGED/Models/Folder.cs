@@ -20,10 +20,12 @@ namespace ProjetGED.Models
         public User Author { get; set; }
         public DateTime CreatedAt { get; set; }
         public ICollection<Document> Documents { get; set; }
+        public ICollection<FolderPrivilege> FolderPrivileges { get; set; }
 
         public Folder()
         {
             Documents = new List<Document>();
+            FolderPrivileges = new List<FolderPrivilege>();
         }
     }
 }

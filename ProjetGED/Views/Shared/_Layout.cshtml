@@ -10,6 +10,7 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/custom.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/select2/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,14 +21,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-               
+
             </div>
-    
+
         </div>
-        </div>
+    </div>
 
     <div class="container body-content">
- 
+
         @RenderBody()
         <hr />
         <footer>
@@ -36,6 +37,17 @@
     </div>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jQuery.my/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/select2/js/select2.min.js"></script>
+    <script src="~/Scripts/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/SearchUser.js" id="search-script" data-url="@Url.Content("~/User/Search")" defer></script>
+    <script src="~/Scripts/FolderPrivilegeFormScript.js"></script>
+    @RenderSection("IndexFolderScript", false)
+    <script src="~/Scripts/UpdatePrivilege.js"></script>
+
+
+
 </body>
 </html>
