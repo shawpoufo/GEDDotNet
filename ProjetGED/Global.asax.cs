@@ -17,6 +17,7 @@ namespace ProjetGED
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             HtmlHelper.ClientValidationEnabled = true;
             HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
+
         }
     }
 }

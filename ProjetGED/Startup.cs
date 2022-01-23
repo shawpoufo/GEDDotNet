@@ -45,7 +45,6 @@ namespace ProjetGED
                     RequiredLength = 6
 
                 };
-                
 
                 return usermanager;
             };
