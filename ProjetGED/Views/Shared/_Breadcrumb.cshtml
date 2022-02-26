@@ -20,7 +20,6 @@
 }
 <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
     <ol class="breadcrumb">
-
         @foreach (var keyValue in paths)
         {
             <li class="breadcrumb-item active">
@@ -29,7 +28,7 @@
 
             j++;
         }
-            <li class="breadcrumb-item" aria-current="page"> @names[names.Length - 1] </li>   
+        <!--<li class="breadcrumb-item" aria-current="page"> @names[names.Length - 1] </li>   -->
     </ol>
 </nav>
 

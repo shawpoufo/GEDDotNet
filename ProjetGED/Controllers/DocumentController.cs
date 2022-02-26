@@ -98,5 +98,30 @@ namespace ProjetGED.Controllers
             Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
             return File(doc, mimeType);
         }
+
+        [HttpPost]
+        [Route("Document/Remove")]
+        public ActionResult Remove(string documentId)
+        {
+            var id = this.UserId();
+            using (var context = new GEDContext())
+            {
+                var docID = Int16.Parse(documentId);
+                Document doc = context.Documents.Where(u => u.Id == docID && u.Author.Id == id).FirstOrDefault();
+                int accessDocument = context.AccessDocuments.Where(u => u.documentId == docID && u.userId == id).Select(u=>u.write).FirstOrDefault();
+                if (doc != null || accessDocument > 0)
+                {
+                    var document = context.Documents.Find(docID);
+                    
+                    context.Documents.Remove(document);
+                    context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
     }
 }

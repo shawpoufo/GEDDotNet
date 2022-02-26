@@ -1,0 +1,92 @@
+﻿@using ProjetGED.Models
+@model ProjetGED.Models.User
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    var user = ViewBag.user;
+}
+
+
+<!--
+@using (Html.BeginForm("Update", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+
+    <div class="form-group">
+
+
+        <label for="email">Email address</label>
+
+
+        <input type="email" required class="form-control" name="email" id="email" aria-describedby="email" value="@user.Email">
+
+
+    </div>
+
+
+    <div class="form-group">
+
+
+        <label for="name">Name</label>
+
+
+        <input type="text" required class="form-control" name="name" id="name" value="@user.Name">
+
+
+    </div>
+
+
+    <div class="form-group form-check">
+
+
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+
+
+        <label class="form-check-label" for="exampleCheck1">Remember me</label>
+
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+}
+-->
+
+<div class="form-body" id="updatePassword">
+    <div class="row">
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Account Settings</h3>
+
+                    <p>Fill in the data below.</p>
+                    @using (Html.BeginForm("Update", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+
+                        <div class="col-md-12">
+                            <input type="email" required class="form-control" name="email" id="email" aria-describedby="email" value="@user.Email"/>
+                        </div>
+
+                        <div class="col-md-12">
+                            <input type="text" required class="form-control" name="name" id="name" value="@user.Name"/>
+                        </div>
+
+
+
+
+                        <div class="form-button mt-3">
+                            <button id="submit" type="submit" class="btn btn-primary">Change Password</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,10 +20,5 @@ namespace ProjetGED.Models
         //[ForeignKey("Folder")]
         public Folder Folder { get; set; }
         public DateTime UploadedAt { get; set; }
-        public ICollection<DocumentPrivilege> DocumentPrivileges { get; set; }
-        public Document()
-        {
-            DocumentPrivileges = new List<DocumentPrivilege>();
-        }
-    }
+    }   
 }
