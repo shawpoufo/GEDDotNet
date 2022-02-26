@@ -2,68 +2,15 @@
 @{
     ViewBag.Title = "LogIn";
 }
-<!--
+
+<h2>LogIn</h2>
+
 @Html.ValidationSummary(true)
 
 @using (Html.BeginForm(actionName:"LogIn",controllerName:"Auth",method:FormMethod.Post))
-    {
+{
     @Html.EditorForModel()
     <p>
         <button type="submit">Log In</button>
     </p>
 }
-    -->
-
-<section class="ftco-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="login-wrap p-0">
-                    <h2 class="heading-section text-center">Login</h2>
-                    <h3 class="mb-4 text-center">Have an account?</h3>
-                    @using (Html.BeginForm(actionName: "LogIn", controllerName: "Auth", method: FormMethod.Post))
-                    {
-                        <div class="form-group">
-                            <input type="email" name="Email" class="form-control" placeholder="Username" required>
-                        </div>
-                        <div class="form-group">
-                            <input id="password-field" name="Password" type="password" class="form-control" placeholder="Password" required>
-                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                        </div>
-                        <div class="form-group">
-                            <input id="returnUrl" name="ReturnUrl" type="hidden" value="@ViewBag.returnUrl" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
-                        </div>
-                        <div class="form-group d-md-flex">
-                            <div class="w-50">
-                                <label class="checkbox-wrap checkbox-primary">
-                                    Remember Me
-                                    <input type="checkbox" checked>
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="w-50 text-md-right">
-                                <a href="#" style="color: #000;float: right;text-decoration: none;">Forgot Password</a>
-                            </div>
-                        </div>
-                    }
-                    <p class="w-100 text-center" style="color: #000">&mdash; Or Sign In With &mdash;</p>
-                    <div class="social d-flex text-center">
-                        <a href="#" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a>
-                        <a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
-                    </div>
-                    <div class="form-group d-md-flex">
-                        <div class="w-100">
-                            <p style="color: #000;text-align: center;margin-top: 30px;text-decoration: none;">
-                               Are you new ?
-                                <a href="/Auth/Register" style="font-weight: bold;color: #000;">Register</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

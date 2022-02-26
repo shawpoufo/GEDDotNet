@@ -5,154 +5,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/custom.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link href="~/Scripts/select2/css/select2.min.css" rel="stylesheet" />
 </head>
-
-@{string ctrName = ViewContext.RouteData.Values["action"].ToString();}
-
 <body>
-    <section class="ftco-section">
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <div class="fw-bold"><i class="fa fa-user"></i> @User.Identity.Name</div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col">
-                    <a class="navbar-brand" href="/">DGED <span>Drive Clone</span></a>
-                </div>
-                <div class="col d-flex justify-content-end">
-                    <div class="social-media">
-                        <p class="mb-0 d-flex">
-
-                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
-                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
-                        </p>
-                    </div>
-                </div>
             </div>
+
         </div>
-        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-            <div class="container">
-
-
-
-                <div class="collapse navbar-collapse" id="ftco-nav">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item @((@Context.Request.Path.Contains("Folder")) ? "active" : "")"><a href="/" class="nav-link">Home</a></li>
-
-                        <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New</a></li>
-                        <li class="nav-item @((@Context.Request.Path.Contains("shared")) ? "active" : "")"><a href="/folder/shared" class="nav-link"><i class="fa fa-share" aria-hidden="true"></i> Shared</a></li>
-                        <li class="nav-item @((@Context.Request.Path.Contains("trash")) ? "active" : "")"><a href="/trash" class="nav-link"><i class="fa fa-trash" aria-hidden="true"></i> Trash</a></li>
-                    </ul>
-                </div>
-
-                <div class="collapse navbar-collapse" style="flex-grow: 0;" id="navbarNav">
-                    <ul class="nav navbar-nav ml-auto">
-                        @if (!@User.Identity.IsAuthenticated)
-                        {
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="/auth/login">LogIn</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/auth/register">SignUp</a>
-                            </li>
-
-                        }
-                        else
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span>@User.Identity.Name</span>
-                                    <img src="https://pluspng.com/img-png/user-png-icon-download-icons-logos-emojis-users-2240.png" style="width: 25px;height: 25px;" />
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Profile</a>
-                                    <a class="dropdown-item" href="/User/Settings">Update Account</a>
-                                    <a class="dropdown-item" href="/User/Password">Update Password</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="@Url.Action("logout", "auth")">Logout</a>
-                                </div>
-                            </li>
-                        }
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- END nav -->
-
-    </section>
+    </div>
 
     <div class="container body-content">
 
         @RenderBody()
-
-
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
     </div>
 
-
-
-    <footer class="footer">
-
-        <div class="container">
-
-            <div class="row mb-5">
-                <div class="col-md-6">
-                    <div class="site-logo">
-                        <a href="#">DGED</a>
-                    </div>
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <ul class="list-unstyled social-icons">
-                        <li><a href="#" class="fb"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#" class="tw"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#" class="in"><span class="fa fa-instagram"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row mb-5">
-                <div class="col-md-6 ">
-                    <ul class="nav-links list-unstyled nav-left">
-                        <li><a href="#">Privacy</a></li>
-                        <li><a href="#">Policy</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <ul class="nav-links list-unstyled nav-right">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Our works</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col ">
-                    <div class="copyright">
-                        <p><small>Copyright 2022. All Rights Reserved.</small></p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </footer>
-
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jQuery.my/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/Login.js"></script>
-    <script src="~/Scripts/Navbar.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-    <script src="~/Scripts/DataTable.js"></script>
+    <script src="~/Scripts/select2/js/select2.min.js"></script>
+    <script src="~/Scripts/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/SearchUser.js" id="search-script" data-url="@Url.Content("~/User/Search")" defer></script>
+    <script src="~/Scripts/FolderPrivilegeFormScript.js"></script>
+    @RenderSection("IndexFolderScript", false)
+    <script src="~/Scripts/UpdatePrivilege.js"></script>
+
+
 
 </body>
 </html>

@@ -16,19 +16,19 @@ namespace ProjetGED.Controllers
     [AllowAnonymous]
     public class AuthController : Controller
     {
-
         private readonly UserManager<ApplicationUser> userManager;
 
-        public AuthController():this(Startup.UserManagerFactory.Invoke())
+        public AuthController()
+            :this(Startup.UserManagerFactory.Invoke())
         {
-
+            
         }
 
         public AuthController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
+         
         }
-
         // GET: Auth
         [HttpGet]
         public ActionResult LogIn(string returnUrl)
@@ -36,20 +36,17 @@ namespace ProjetGED.Controllers
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("index", "home");
             var model = new LogInModel { ReturnUrl = returnUrl };
-            ViewBag.returnUrl = returnUrl;
             return View(model);
         }
-
-
         [HttpPost]
-        public async Task<ActionResult> LogIn(string Email,string Password,string ReturnUrl)
+        public async Task<ActionResult> LogIn(LogInModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            var user = await userManager.FindAsync(Email, Password);
+            var user = await userManager.FindAsync(model.Email, model.Password);
             
             if (user != null)
             {
@@ -60,18 +57,17 @@ namespace ProjetGED.Controllers
                 identity.AddClaim(new Claim(type:"UserId", value:userId.ToString()));
                 authManager.SignIn(identity);
               
-                if (string.IsNullOrEmpty(ReturnUrl) || !Url.IsLocalUrl(ReturnUrl))
+                if (string.IsNullOrEmpty(model.ReturnUrl) || !Url.IsLocalUrl(model.ReturnUrl))
                 {
                     return Redirect(Url.Action("index", "home"));
                 }
                 else
-                    return Redirect(ReturnUrl);
+                    return Redirect(model.ReturnUrl);
             }
 
             ModelState.AddModelError("", "Invalid email or password");
             return View();
         }
-
 
         public ActionResult LogOut()
         {
@@ -81,14 +77,12 @@ namespace ProjetGED.Controllers
             return RedirectToAction("index", "home");
         }
 
-
         public ActionResult Register()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<ActionResult> Register(string Email, string Password, string Name)
+        public async Task<ActionResult> Register(SignUpModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -97,7 +91,7 @@ namespace ProjetGED.Controllers
 
             var user = new ApplicationUser
             {
-                UserName = Email,
+                UserName = model.Email,
                 
             };
             //var result = await userManager.CreateAsync(user, model.Password);
@@ -110,11 +104,11 @@ namespace ProjetGED.Controllers
             IEnumerable<string> resError = null;
                 using (var transaction = Startup.DBContext.Database.BeginTransaction())
                 {
-                    var result = await userManager.CreateAsync(user, Password);
+                    var result = await userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
                         var identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                        var newUser = Startup.DBContext.OurUsers.Add(new User { Email = Email, Name = Name });
+                        var newUser = Startup.DBContext.OurUsers.Add(new User { Email = model.Email, Name = model.Name });
 
                         try
                         {
@@ -149,7 +143,6 @@ namespace ProjetGED.Controllers
             
             return View();
         }
-
 
         protected override void Dispose(bool disposing)
         {

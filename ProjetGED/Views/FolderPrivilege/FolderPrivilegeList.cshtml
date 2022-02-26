@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ProjetGED.Models.FolderPrivilege>
+
+
+@using (Html.BeginForm("New", "FolderPrivilege", method: FormMethod.Post, htmlAttributes: new { id = "privilege-form" }))
+{
+
+    <div class="text-danger">
+        @Html.ValidationMessage("NewUserId")
+    </div>
+
+    if (Model != null)
+    {
+        if (Model.Count() == 0)
+        {
+            <p>aucun utilisateur n'est affecter a ce dossier</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">UserName</th>
+                            <th scope="col">Lecture</th>
+                            <th scope="col">Modification</th>
+                            <th scope="col">Téléchargement</th>
+                            <th scope="col">Modifier</th>
+                            <th scope="col">Annuler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var folderPrivilege in Model)
+                        {
+                            <tr>
+                                @Html.Hidden("hiddenId", folderPrivilege.Author.Id.ToString())
+                                <td>@folderPrivilege.Author.Email</td>
+                                <td>@Html.CheckBox("r", folderPrivilege.Read, new { disabled = "disabled" })</td>
+                                <td>@Html.CheckBox("w", folderPrivilege.Write, new { disabled = "disabled" })</td>
+                                <td>@Html.CheckBox("d", folderPrivilege.DownLoad, new { disabled = "disabled" })</td>
+                                <td>
+                                    <a class="btn-modifie-privilege" href="#" data-read="@folderPrivilege.Read" data-write="@folderPrivilege.Write" data-download="@folderPrivilege.DownLoad"
+                                       data-email="@folderPrivilege.Author.Email" data-user-id="@folderPrivilege.Author.Id.ToString()">modifier</a>
+                                </td>
+                                <td><a class="btn-delete-privilege" href="#" data-user-id="@folderPrivilege.Author.Id.ToString()" data-email="@folderPrivilege.Author.Email">supprimer</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-danger"> fichier introuvable</p>
+    }
+
+
+}
+<input type="hidden" id="doc-type" value="folder" />
+@Html.Hidden("path", ViewData["path"].ToString())

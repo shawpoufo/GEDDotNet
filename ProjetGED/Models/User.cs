@@ -19,12 +19,15 @@ namespace ProjetGED.Models
         public string Email { get; set; }
         public ICollection<Folder> Folders { get; set; }
         public ICollection<Document> Documents { get; set; }
-        //public ICollection<AccessFolder> AccessFolders { get; set; }
+        public ICollection<FolderPrivilege> FolderPrivileges{ get; set; }
+        public ICollection<DocumentPrivilege> DocumentPrivileges{ get; set; }
         public User()
         {
             Folders = new List<Folder>();
             Documents = new List<Document>();
-            //AccessFolders = new List<AccessFolder>();
+            FolderPrivileges = new List<FolderPrivilege>();
+            DocumentPrivileges = new List<DocumentPrivilege>();
+
         }
     }
 }
